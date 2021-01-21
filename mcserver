@@ -33,9 +33,9 @@ attachServer() {
 getServerStatus() {
     if ! screen -list | grep -q "mc" 
     then
-        echo "Server is not running!"
+        echo false
     else
-        echo "Server is running!"
+        echo true
     fi
 }
 
@@ -67,18 +67,37 @@ backupServer() {
 
 if [ $1 = "start" ]
 then
-    startServer
+    # Only start server if it's not running already
+    if [ $(getServerStatus) = true ]
+    then
+        echo "The server is already running!"
+    else 
+        startServer
+    fi
+
 elif [ $1 = "stop" ]
 then
     stopServer
+
+
 elif [ $1 = "backup" ]
 then
     backupServer
+
+
 elif [ $1 = "attach" ]
 then
     attachServer
+
+
 elif [ $1 = "status" ]
 then
-    getServerStatus
+    # Call method to get the server status
+    if [ $(getServerStatus) = true ]
+    then
+        echo "Server is running!"
+    else
+        echo "Server is not running!"
+    fi
 fi
 
