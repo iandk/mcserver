@@ -1,0 +1,84 @@
+#!/bin/bash
+
+
+########################################
+#            VARIABLES                 #
+########################################
+
+
+SERVER_DIR="/root/mc/"
+BACKUP_DIR="/backup/"
+MIN_RAM="256M"
+MAX_RAM="1024M"
+
+
+
+########################################
+#            FUNCTIONS                 #
+########################################
+
+startServer() {
+    cd $SERVER_DIR && screen -dmS mc java -Xmx$MAX_RAM -Xms$MIN_RAM -jar mc.jar
+}
+
+stopServer() {
+    screen -S mc -X stuff "stop$(printf \\r)"
+}
+
+attachServer() {
+    screen -r mc
+}
+
+
+getServerStatus() {
+    if ! screen -list | grep -q "mc" 
+    then
+        echo "Server is not running!"
+    else
+        echo "Server is running!"
+    fi
+}
+
+
+backupServer() {
+    TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S`
+    ARCHIVE=$BACKUP_DIR$TIMESTAMP".zip"
+
+    # Stop mc server
+    stopServer
+
+    # Sleep 5 seconds 
+    sleep 5
+
+    # Create backup
+    zip -r  $ARCHIVE $SERVER_DIR
+
+    # Start mc server
+    startServer
+}
+
+
+
+
+########################################
+#            MAIN FLOW                 #
+########################################
+
+
+if [ $1 = "start" ]
+then
+    startServer
+elif [ $1 = "stop" ]
+then
+    stopServer
+elif [ $1 = "backup" ]
+then
+    backupServer
+elif [ $1 = "attach" ]
+then
+    attachServer
+elif [ $1 = "status" ]
+then
+    getServerStatus
+fi
+
