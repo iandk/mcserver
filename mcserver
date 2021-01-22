@@ -13,6 +13,17 @@ MAX_RAM="1024M"
 
 
 
+
+
+########################################
+#            Color codes               #
+########################################
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
 ########################################
 #            FUNCTIONS                 #
 ########################################
@@ -44,17 +55,39 @@ backupServer() {
     TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S`
     ARCHIVE=$BACKUP_DIR$TIMESTAMP".zip"
 
-    # Stop mc server
-    stopServer
+    # Stop mc server if it's running
+    if [ $(getServerStatus) = true ]
+    then
+        echo -e "${BLUE}Stopping server...${NC}"
+        stopServer
+        sleep 10
+    fi
 
-    # Sleep 5 seconds 
-    sleep 5
 
+    # Check if the server is still running 
+    if [ $(getServerStatus) = true ]
+    then
+        echo -e "${RED}Server is still running, can't create backup!${NC}"
+        echo -e "The server took too long to shutdown since it probably was still booting up."
+        echo -e "Please try again in a few minutes."
+        exit
+    fi
+
+    echo -e "${BLUE}Creating backup...${NC}"
     # Create backup
     zip -r  $ARCHIVE $SERVER_DIR
 
     # Start mc server
-    startServer
+    if [ $(getServerStatus) = false ]
+    then
+        echo -e "${BLUE}Starting server...${NC}"
+        startServer
+    fi
+    
+
+    echo -e "${GREEN}Done!${NC}"
+
+
 }
 
 
@@ -65,39 +98,61 @@ backupServer() {
 ########################################
 
 
+if [ -z $1 ]
+then
+    echo -e "${GREEN}Available commands:${NC}"
+    echo "mcserver [start/stop/status/backup/attach]"
+    exit
+fi
+
 if [ $1 = "start" ]
 then
     # Only start server if it's not running already
     if [ $(getServerStatus) = true ]
     then
-        echo "The server is already running!"
-    else 
+        echo -e "${RED}The server is already running!${NC}"
+    else
         startServer
+        echo -e "${GREEN}Server has been started!${NC}" 
     fi
+
 
 elif [ $1 = "stop" ]
 then
+    # Check if the server is even running
+    if [ $(getServerStatus) = false ]
+    then
+        # Server is not running
+        echo -e "${RED}The server is already stopped!${NC}"
+        exit
+    fi
+
+    # Seems to be running, therefore send the stop command
     stopServer
+
+    echo -e "${GREEN}Stop signal has been sended but it might take a minute!${NC}"
+    
 
 
 elif [ $1 = "backup" ]
 then
+    # Run backup function
     backupServer
 
 
 elif [ $1 = "attach" ]
 then
+    # Attach to the screen session
     attachServer
-
 
 elif [ $1 = "status" ]
 then
     # Call method to get the server status
     if [ $(getServerStatus) = true ]
     then
-        echo "Server is running!"
+        echo -e "${GREEN}Server is running!${NC}"
     else
-        echo "Server is not running!"
+        echo -e "${RED}Server is stopped!${NC}"
     fi
 fi
 
