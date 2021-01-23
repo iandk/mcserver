@@ -27,6 +27,24 @@ NC='\033[0m'
 #            FUNCTIONS                 #
 ########################################
 
+installServer() {
+    # Install required packages
+    apt install -y screen zip openjdk-11-jre-headless
+    # Create the required directorys
+    mkdir $SERVER_DIR
+    mkdir $BACKUP_DIR
+    # Download the server jar
+    cd $SERVER_DIR
+    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/437/downloads/paper-1.16.5-437.jar
+    mv paper-1.16.5-437.jar mc.jar
+    # Accept eula
+    echo "eula=true" > eula.txt
+
+    echo -e "${GREEN}Done!${NC}"
+}
+
+
+
 startServer() {
      # Check if the server is already running
     if [ $(getServerStatus) = true ]
@@ -93,7 +111,7 @@ backupServer() {
     fi
 
 
-    # Check if the server is still running 
+    # Throw error message and exit if the server is still running to avoid a corrupted backup
     if [ $(getServerStatus) = true ]
     then
         echo -e "${RED}Server is still running, can't create backup!${NC}"
@@ -124,7 +142,7 @@ backupServer() {
 if [ -z $1 ]
 then
     echo -e "${GREEN}Available commands:${NC}"
-    echo "mcserver [start/stop/status/backup/attach]"
+    echo "mcserver [start/stop/status/backup/attach/install]"
     exit
 fi
 
@@ -156,5 +174,8 @@ then
     else
         echo -e "${RED}Stopped!${NC}"
     fi
+elif [ $1 = "install" ]
+then
+    installServer
 fi
 
