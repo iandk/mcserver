@@ -8,7 +8,11 @@ wget -qO /usr/local/bin/mcserver https://git.io/JtYSi
 chmod +x /usr/local/bin/mcserver
 ```
 
-
+Crontab
+```
+@reboot /usr/local/bin/mcserver start
+@daily /usr/local/bin/mcserver backup
+```
 
 ## Available commands
 Start minecraft server
