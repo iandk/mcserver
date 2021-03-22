@@ -6,8 +6,9 @@
 ########################################
 
 
-SERVER_DIR="/root/mc/"
+SERVER_DIR="/opt/mc/"
 BACKUP_DIR="/backup/"
+KEEP_BACKUP_COUNT=7
 MIN_RAM="256M"
 MAX_RAM="1024M"
 
@@ -35,11 +36,10 @@ installServer() {
     mkdir $BACKUP_DIR
     # Download the server jar
     cd $SERVER_DIR
-    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/437/downloads/paper-1.16.5-437.jar
-    mv paper-1.16.5-437.jar mc.jar
+    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/564/downloads/paper-1.16.5-564.jar
+    mv paper-1.16.5-564.jar mc.jar
     # Accept eula
     echo "eula=true" > eula.txt
-
     echo -e "${GREEN}Done!${NC}"
 }
 
@@ -108,10 +108,24 @@ getServerStatus() {
     fi
 }
 
+rotateBackups() {
+    # Count the number of backups stored
+    numberOfBackups=$(ls $BACKUP_DIR | wc -l)
+    
+    # Check if there are more backups than we'd like to store
+    if [ "$numberOfBackups" -ge "$KEEP_BACKUP_COUNT" ]
+    then
+        echo -e "${BLUE}Deleting oldest backup...${NC}"
+        # Delete the oldest backup
+        rm "$(ls -t | tail -1)"
+    fi
+}
+
 
 backupServer() {
     TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S`
     ARCHIVE=$BACKUP_DIR$TIMESTAMP".zip"
+    
 
     # Stop mc server if it's running
     if [ $(getServerStatus) = true ]
@@ -119,6 +133,8 @@ backupServer() {
         echo -e "${BLUE}Stopping server...${NC}"
         stopServer
     fi
+    
+    rotateBackups
 
 
     # Throw error message and exit if the server is still running to avoid a corrupted backup
