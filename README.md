@@ -7,6 +7,9 @@ Simple bash script to control a Minecraft server
 wget -qO /usr/local/bin/mcserver https://git.io/JtYSi
 chmod +x /usr/local/bin/mcserver
 ```
+```
+mcserver install
+```
 
 Crontab
 ```
