@@ -113,7 +113,7 @@ rotateBackups() {
     numberOfBackups=$(ls $BACKUP_DIR | wc -l)
     
     # Check if there are more backups than we'd like to store
-    if [ "$numberOfBackups" -ge "$KEEP_BACKUP_COUNT" ]
+    if [ "$numberOfBackups" == "$KEEP_BACKUP_COUNT" ]
     then
         echo -e "${BLUE}Deleting oldest backup...${NC}"
         # Delete the oldest backup
