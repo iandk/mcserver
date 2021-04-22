@@ -111,14 +111,14 @@ getServerStatus() {
 
 rotateBackups() {
     # Count the number of backups stored
-    numberOfBackups=$(ls $BACKUP_DIR | wc -l)
+    numberOfBackups=$(/usr/bin/ls $BACKUP_DIR | wc -l)
     
     # Check if there are more backups than we'd like to store
     if [ "$numberOfBackups" == "$KEEP_BACKUP_COUNT" ]
     then
         echo -e "${BLUE}Deleting oldest backup...${NC}"
         # Delete the oldest backup
-        rm "$(ls -t | tail -1)"
+        /usr/bin/rm "$(/usr/bin/ls -t | tail -1)"
     fi
 }
 
