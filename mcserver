@@ -118,7 +118,7 @@ rotateBackups() {
     then
         echo -e "${BLUE}Deleting oldest backup...${NC}"
         # Delete the oldest backup
-        /usr/bin/rm "$(/usr/bin/ls -t | tail -1)"
+        /usr/bin/rm "$(/usr/bin/ls -t | /usr/bin/tail -1)"
     fi
 }
 
