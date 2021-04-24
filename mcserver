@@ -111,14 +111,17 @@ getServerStatus() {
 
 rotateBackups() {
     # Count the number of backups stored
-    numberOfBackups=$(/usr/bin/ls $BACKUP_DIR | wc -l)
+    numberOfBackups=$(ls $BACKUP_DIR | wc -l)
     
     # Check if there are more backups than we'd like to store
     if [ "$numberOfBackups" == "$KEEP_BACKUP_COUNT" ]
     then
         echo -e "${BLUE}Deleting oldest backup...${NC}"
+
         # Delete the oldest backup
-        /usr/bin/rm "$(/usr/bin/ls -t | /usr/bin/tail -1)"
+	    cd $BACKUP_DIR
+	    oldestBackup=$(ls -t | tail -1)
+        rm $oldestBackup
     fi
 }
 
@@ -209,4 +212,3 @@ elif [ $1 = "install" ]
 then
     installServer
 fi
-
