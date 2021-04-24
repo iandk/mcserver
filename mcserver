@@ -119,8 +119,8 @@ rotateBackups() {
         echo -e "${BLUE}Deleting oldest backup...${NC}"
 
         # Delete the oldest backup
-	    cd $BACKUP_DIR
-	    oldestBackup=$(ls -t | tail -1)
+        cd $BACKUP_DIR
+	oldestBackup=$(ls -t | tail -1)
         rm $oldestBackup
     fi
 }
