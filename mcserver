@@ -36,8 +36,7 @@ installServer() {
     mkdir $SERVER_DIR $BACKUP_DIR
     # Download the server jar
     cd $SERVER_DIR
-    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/629/downloads/paper-1.16.5-629.jar
-    mv paper-1.16.5-629.jar mc.jar
+    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/629/downloads/paper-1.16.5-629.jar -O mc.jar
     # Accept eula
     echo "eula=true" > eula.txt
     echo -e "${GREEN}Done!${NC}"
@@ -150,7 +149,11 @@ backupServer() {
 
 }
 
-
+printHelp() {
+    echo -e "${GREEN}Available commands:${NC}"
+    echo "mcserver [start/stop/status/backup/attach/start-attached/install]"
+    exit
+}
 
 
 ########################################
@@ -160,9 +163,7 @@ backupServer() {
 
 if [ -z $1 ]
 then
-    echo -e "${GREEN}Available commands:${NC}"
-    echo "mcserver [start/stop/status/backup/attach/install]"
-    exit
+    printHelp
 fi
 
 if [ $1 = "start" ]
@@ -200,4 +201,7 @@ then
 elif [ $1 = "install" ]
 then
     installServer
+    
+else
+    printHelp
 fi
