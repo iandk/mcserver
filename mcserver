@@ -64,16 +64,6 @@ startServer() {
     fi
 }
 
-startServerAttached() {
-     # Check if the server is already running
-    if [ $(getServerStatus) = true ]
-    then
-        echo -e "${RED}The server is already running!${NC}"
-    else
-        # Run start command 
-        cd $SERVER_DIR && screen -S mc java -Xmx$MAX_RAM -Xms$MIN_RAM -jar mc.jar
-    fi
-}
 
 stopServer() {
     # Check if the server is even running
@@ -182,7 +172,7 @@ then
     
 elif [ $1 = "start-attached" ]
 then
-    startServerAttached
+    startServer && attachServer
 
 elif [ $1 = "stop" ]
 then
