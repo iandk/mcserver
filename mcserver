@@ -31,14 +31,13 @@ NC='\033[0m'
 
 installServer() {
     # Install required packages
-    apt install -y screen zip openjdk-11-jre-headless
+    apt update && apt install -y screen zip openjdk-11-jre-headless
     # Create the required directorys
-    mkdir $SERVER_DIR
-    mkdir $BACKUP_DIR
+    mkdir $SERVER_DIR $BACKUP_DIR
     # Download the server jar
     cd $SERVER_DIR
-    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/564/downloads/paper-1.16.5-564.jar
-    mv paper-1.16.5-564.jar mc.jar
+    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/629/downloads/paper-1.16.5-629.jar
+    mv paper-1.16.5-629.jar mc.jar
     # Accept eula
     echo "eula=true" > eula.txt
     echo -e "${GREEN}Done!${NC}"
