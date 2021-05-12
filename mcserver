@@ -30,6 +30,8 @@ NC='\033[0m'
 ########################################
 
 installServer() {
+    echo -e "${BLUE}Installing minecraft server...${NC}"
+    sleep 2
     # Install required packages
     apt update && apt install -y screen zip openjdk-11-jre-headless
     # Create the required directorys
@@ -40,6 +42,8 @@ installServer() {
     # Accept eula
     echo "eula=true" > eula.txt
     echo -e "${GREEN}Done!${NC}"
+    echo -e "${BLUE}Starting server...${NC}"
+    startServer
 }
 
 
