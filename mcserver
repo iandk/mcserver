@@ -126,6 +126,8 @@ backupServer() {
     # Stop mc server if it's running
     if [ $(getServerStatus) = true ]
     then
+    	screen -S mc -X stuff "say [BACKUP] Stopping server in a few seconds...$(printf \\r)"
+	sleep 3
         echo -e "${BLUE}Stopping server...${NC}"
         stopServer
     fi
