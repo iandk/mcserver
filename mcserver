@@ -88,6 +88,11 @@ stopServer() {
 }
 
 attachServer() {
+    if [ $(getServerStatus) = false ]
+    then
+        echo -e "${RED}The server is not running!${NC}"
+        exit
+    fi
     screen -r mc
 }
 
