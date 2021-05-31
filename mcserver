@@ -13,6 +13,10 @@ KEEP_BACKUP_COUNT=7
 MIN_RAM="256M"
 MAX_RAM="1024M"
 
+# Remote backup
+REMOTE_SERVER=""
+REMOTE_USER=""
+REMOTE_PATH=""
 
 ########################################
 #            Color codes               #
@@ -33,7 +37,7 @@ installServer() {
     echo -e "${BLUE}Installing minecraft server...${NC}"
     sleep 2
     # Install required packages
-    apt update && apt install -y screen zip openjdk-11-jre-headless
+    apt update && apt install -y screen zip openjdk-11-jre-headless rsync
     # Create the required directorys
     mkdir $SERVER_DIR $BACKUP_DIR
     # Download the server jar
@@ -160,9 +164,13 @@ backupServer() {
 
 }
 
+syncBackups() {
+    rsync -azP --delete $BACKUP_DIR $REMOTE_USER@$REMOTE_SERVER:$REMOTE_PATH
+}
+
 printHelp() {
     echo -e "${GREEN}Available commands:${NC}"
-    echo "mcserver [start/stop/status/backup/attach/start-attached/install]"
+    echo "mcserver [start/stop/status/backup/sync/attach/start-attached/install]"
     exit
 }
 
@@ -193,6 +201,12 @@ elif [ $1 = "backup" ]
 then
     # Run backup function
     backupServer
+    
+   
+elif [ $1 = "sync" ]
+then
+    # Sync to remote backup server
+    syncBackups
 
 
 elif [ $1 = "attach" ]
