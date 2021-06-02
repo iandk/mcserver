@@ -42,7 +42,7 @@ installServer() {
     mkdir $SERVER_DIR $BACKUP_DIR
     # Download the server jar
     cd $SERVER_DIR
-    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/692/downloads/paper-1.16.5-692.jar -O mc.jar
+    wget https://papermc.io/api/v2/projects/paper/versions/1.16.5/builds/759/downloads/paper-1.16.5-759.jar -O mc.jar
     # Accept eula
     echo "eula=true" > eula.txt
     echo -e "${GREEN}Done!${NC}"
@@ -168,9 +168,15 @@ syncBackups() {
     rsync -azP --delete $BACKUP_DIR $REMOTE_USER@$REMOTE_SERVER:$REMOTE_PATH
 }
 
+updateScript() {
+    wget -qO /usr/local/bin/mcserver https://git.io/JtYSi
+    chmod +x /usr/local/bin/mcserver
+    echo -e "${GREEN}Done!${NC}"
+}
+
 printHelp() {
     echo -e "${GREEN}Available commands:${NC}"
-    echo "mcserver [start/stop/status/backup/sync/attach/start-attached/install]"
+    echo "mcserver [start/stop/status/backup/sync/attach/start-attached/install/update]"
     exit
 }
 
@@ -207,6 +213,11 @@ elif [ $1 = "sync" ]
 then
     # Sync to remote backup server
     syncBackups
+
+elif [ $1 = "update" ]
+then
+    # Sync to remote backup server
+    updateScript
 
 
 elif [ $1 = "attach" ]
