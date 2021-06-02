@@ -15,6 +15,10 @@ Crontab
 ```
 @reboot /usr/local/bin/mcserver start
 @daily /usr/local/bin/mcserver backup
+
+# With sync to remote server
+# @daily /usr/local/bin/mcserver backup && /usr/local/bin/mcserver sync
+
 ```
 
 ## Available commands
