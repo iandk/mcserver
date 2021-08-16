@@ -35,22 +35,9 @@ NC='\033[0m'
 
 installServer() {
     echo -e "${BLUE}Installing minecraft server...${NC}"
-    sleep 2
-    
-    # Install Java 16
-    cd /tmp
-    wget https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public
-    apt install -y wget apt-transport-https gnupg
-    gpg --no-default-keyring --keyring ./adoptopenjdk-keyring.gpg --import public
-    gpg --no-default-keyring --keyring ./adoptopenjdk-keyring.gpg --export --output adoptopenjdk-archive-keyring.gpg
-    rm adoptopenjdk-keyring.gpg
-    mv adoptopenjdk-archive-keyring.gpg /usr/share/keyrings
-    echo "deb [signed-by=/usr/share/keyrings/adoptopenjdk-archive-keyring.gpg] https://adoptopenjdk.jfrog.io/adoptopenjdk/deb buster main" | tee /etc/apt/sources.list.d/adoptopenjdk.list
-    apt update && apt-cache search adoptopenjdk
-    apt install -y adoptopenjdk-16-hotspot
-    
+    sleep 2   
     # Install required packages
-    apt update && apt install -y screen zip rsync
+    apt update && apt install -y screen zip rsync openjdk-17-jdk-headless
     # Create the required directorys
     mkdir $SERVER_DIR $BACKUP_DIR
     # Download the server jar
