@@ -42,7 +42,7 @@ installServer() {
     mkdir $SERVER_DIR $BACKUP_DIR
     # Download the server jar
     cd $SERVER_DIR
-    wget https://api.papermc.io/v2/projects/paper/versions/1.19.2/builds/162/downloads/paper-1.19.2-162.jar -O mc.jar
+    wget https://api.papermc.io/v2/projects/paper/versions/1.20.1/builds/193/downloads/paper-1.20.1-193.jar -O mc.jar
     # Accept eula
     echo "eula=true" > eula.txt
     echo -e "${GREEN}Done!${NC}"
